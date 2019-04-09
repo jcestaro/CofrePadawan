@@ -7,13 +7,13 @@ import br.com.github.jcestaro.CofrePadawan.Menu.Menu;
 import br.com.github.jcestaro.CofrePadawan.Menu.Opcao;
 import br.com.github.jcestaro.CofrePadawan.Movimento.Deposito;
 import br.com.github.jcestaro.CofrePadawan.Movimento.Saque;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cofre {
 
+    private static Cofre singletonCofre = null;
     public List<Dinheiro> listaDinheiro = new ArrayList<>();
     public List<Dinheiro> opcoesMoedasECedulas = new ArrayList<>();
     Dinheiro valorEscolhido;
@@ -22,6 +22,17 @@ public class Cofre {
     Saque saque;
     Deposito deposito;
     Menu menu = new Menu();
+
+    private Cofre() {}
+
+    public static Cofre getInstance()
+    {
+        if (singletonCofre == null)
+            singletonCofre = new Cofre();
+
+        return singletonCofre;
+    }
+
 
     public void exibeMenuPrincipal () {
         menu.montaMenu();

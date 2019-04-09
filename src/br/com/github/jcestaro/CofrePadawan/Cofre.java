@@ -15,13 +15,13 @@ public class Cofre {
 
     private static Cofre singletonCofre = null;
     public List<Dinheiro> listaDinheiro = new ArrayList<>();
-    public List<Dinheiro> opcoesMoedasECedulas = new ArrayList<>();
-    Dinheiro valorEscolhido;
-    Opcao opcaoMenuEscolhida;
-    BigDecimal saldoTotal;
-    Saque saque;
-    Deposito deposito;
-    Menu menu = new Menu();
+    public List<Dinheiro> opcoesMoedasECedulas;
+    private Dinheiro valorEscolhido;
+    private Opcao opcaoMenuEscolhida;
+    private BigDecimal saldoTotal;
+    private Saque saque;
+    private Deposito deposito;
+    private Menu menu = new Menu();
 
     private Cofre() {}
 
@@ -55,16 +55,17 @@ public class Cofre {
         System.out.println("Valor sacado com sucesso!");
     }
 
-//    public void saca(BigDecimal valor){
-//        this.saque = new Saque();
-//
-//        this.saque.movimentar((Dinheiro) valor, this.listaDinheiro);
-//
-//        System.out.println("Valor sacado com sucesso!");
-//    }
+    public void saca(BigDecimal valor){
+        this.saque = new Saque();
+
+        this.saque.movimentar((Dinheiro) valor, this.listaDinheiro);
+
+        System.out.println("Valor sacado com sucesso!");
+    }
 
 
     public List<Dinheiro> transformaOpcoesMoedasECedulasEmLista() {
+        opcoesMoedasECedulas = new ArrayList<>();
 
         for (Moeda moeda : Moeda.values()) {
             this.opcoesMoedasECedulas.add(moeda);

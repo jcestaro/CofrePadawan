@@ -1,7 +1,7 @@
 package br.com.github.jcestaro.CofrePadawan.Menu;
 
 public class OpcaoFechar implements Opcao {
-    private final int codigo = 4;
+    private final int codigo = 5;
     private final String descricao = "Fechar Cofre";
 
     @Override

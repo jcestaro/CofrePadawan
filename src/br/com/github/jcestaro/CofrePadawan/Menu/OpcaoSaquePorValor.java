@@ -1,13 +1,13 @@
 package br.com.github.jcestaro.CofrePadawan.Menu;
 
-public class OpcaoSaque implements Opcao {
+public class OpcaoSaquePorValor implements Opcao {
 
-    private final int codigo = 2;
-    private final String descricao = "Saque";
+    private final int codigo = 3;
+    private final String descricao = "Saque por valor";
 
     @Override
     public void disparaAcao() {
-
+        
     }
 
     @Override

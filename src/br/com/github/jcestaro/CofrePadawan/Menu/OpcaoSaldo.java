@@ -5,7 +5,7 @@ import br.com.github.jcestaro.CofrePadawan.Cofre;
 import java.text.NumberFormat;
 
 public class OpcaoSaldo implements Opcao {
-    private final int codigo = 3;
+    private final int codigo = 4;
     private final String descricao = "Saldo";
 
     @Override

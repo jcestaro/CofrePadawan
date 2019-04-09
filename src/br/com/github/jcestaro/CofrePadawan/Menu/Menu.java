@@ -7,13 +7,15 @@ public class Menu {
 
     public List<Opcao> listaOpcoes = new ArrayList<>();
     Opcao opcaoDeposito = new OpcaoDeposito();
-    Opcao opcaoSaque = new OpcaoSaque();
+    Opcao opcaoSaquePorDinheiro = new OpcaoSaquePorDinheiro();
+    Opcao opcaoSaquePorValor = new OpcaoSaquePorValor();
     Opcao opcaoSaldo = new OpcaoSaldo();
     Opcao opcaoFecharCofre = new OpcaoFechar();
 
     public void montaMenu () {
         listaOpcoes.add(opcaoDeposito);
-        listaOpcoes.add(opcaoSaque);
+        listaOpcoes.add(opcaoSaquePorDinheiro);
+        listaOpcoes.add(opcaoSaquePorValor);
         listaOpcoes.add(opcaoSaldo);
         listaOpcoes.add(opcaoFecharCofre);
     }
@@ -21,7 +23,8 @@ public class Menu {
     @Override
     public String toString() {
         return opcaoDeposito + "\n"
-                + opcaoSaque + "\n"
+                + opcaoSaquePorDinheiro + "\n"
+                + opcaoSaquePorValor + "\n"
                 + opcaoSaldo + "\n"
                 + opcaoFecharCofre;
     }

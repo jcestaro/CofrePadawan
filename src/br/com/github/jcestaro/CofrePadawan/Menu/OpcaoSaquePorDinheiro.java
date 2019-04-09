@@ -2,37 +2,37 @@ package br.com.github.jcestaro.CofrePadawan.Menu;
 
 import br.com.github.jcestaro.CofrePadawan.Cofre;
 import br.com.github.jcestaro.CofrePadawan.Enum.Dinheiro;
-
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class OpcaoDeposito implements Opcao {
-    private final int codigo = 1;
-    private final String descricao = "Depósito";
+public class OpcaoSaquePorDinheiro implements Opcao {
+
+    private final int codigo = 2;
+    private final String descricao = "Saque por dinheiro";
 
     @Override
     public void disparaAcao() {
-        exibeListaOpcoesParaDeposito();
-        validaEDeposita(Cofre.getInstance(), pegaOpcaoEscolhida());
+        exibeListaOpcoesParaSaque();
+        validaESaca(Cofre.getInstance(), pegaOpcaoEscolhida());
     }
 
-    private void exibeListaOpcoesParaDeposito() {
+    private void exibeListaOpcoesParaSaque() {
         Cofre.getInstance().transformaOpcoesMoedasECedulasEmLista().forEach(System.out::println);
 
         System.out.println();
-        System.out.println("Escolha uma opção para depósito: ");
+        System.out.println("Escolha uma opção para saque: ");
     }
 
-    private void validaEDeposita (Cofre cofre, int opcaoEscolhida) {
+    private void validaESaca (Cofre cofre, int opcaoEscolhida) {
         try {
-            Dinheiro dinheiroParaDeposito = cofre.validaCodigoDoDinheiro(opcaoEscolhida);
-            cofre.deposita(dinheiroParaDeposito);
+            Dinheiro dinheiroParaSaque = cofre.validaCodigoDoDinheiro(opcaoEscolhida);
+            cofre.saca(dinheiroParaSaque);
             System.out.println();
         } catch (NoSuchElementException ex) {
             System.out.println();
             System.out.println("Opção inválida, escolha uma outra opção.");
-            validaEDeposita(cofre, pegaOpcaoEscolhida());
+            validaESaca(cofre, pegaOpcaoEscolhida());
         }
     }
 
@@ -48,12 +48,14 @@ public class OpcaoDeposito implements Opcao {
         }
     }
 
+    @Override
     public int getCodigo() {
-        return codigo;
+        return this.codigo;
     }
 
+    @Override
     public String getDescricao() {
-        return descricao;
+        return this.descricao;
     }
 
     @Override

@@ -7,7 +7,9 @@ public class Main {
 
     static void exibeMenuPrincipal () {
         Cofre.getInstance().exibeMenuPrincipal();
+        System.out.println();
         System.out.println("Escolha uma opção: ");
+        System.out.println();
         disparaAcaoDoMenu(pegaOpcaoEscolhida());
     }
 
@@ -33,11 +35,6 @@ public class Main {
             return pegaOpcaoEscolhida();
         }
     }
-
-    static void exibeListaDinheiro (Cofre cofre) {
-        System.out.println(cofre.listaDinheiro);
-    }
-
 
     public static void main(String[] args) {
 

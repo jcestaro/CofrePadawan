@@ -1,8 +1,9 @@
 package br.com.github.jcestaro.CofrePadawan;
 
 import br.com.github.jcestaro.CofrePadawan.Enum.Dinheiro;
+import br.com.github.jcestaro.CofrePadawan.Menu.Opcao;
 
-import java.math.MathContext;
+import java.text.NumberFormat;
 import java.util.*;
 
 public class Main {
@@ -11,6 +12,21 @@ public class Main {
         Cofre novoCofre = new Cofre();
 
         return novoCofre;
+    }
+
+    static void exibeMenuPrincipal (Cofre cofre) {
+        cofre.exibeMenuPrincipal();
+        System.out.println("Escolha uma opção: ");
+    }
+
+    static void disparaAcaoDoMenu (Cofre cofre, int opcaoEscolhida) {
+        try {
+            Opcao opcaoMenu = cofre.validaOpcaoDoMenu(opcaoEscolhida);
+            opcaoMenu.disparaAcao();
+        } catch (NoSuchElementException ex) {
+            System.out.println("Opção inválida, escolha uma outra opção.");
+            disparaAcaoDoMenu(cofre, pegaOpcaoEscolhida());
+        }
     }
 
     static void exibeListaOpcoes (Cofre cofre) {
@@ -25,11 +41,11 @@ public class Main {
             cofre.deposita(dinheiroParaDeposito);
         } catch (NoSuchElementException ex) {
             System.out.println("Opção inválida, escolha uma outra opção.");
-            validaEDeposita(cofre, pegaOpcaoEscolhidaTipoDeposito());
+            validaEDeposita(cofre, pegaOpcaoEscolhida());
         }
     }
 
-    static int pegaOpcaoEscolhidaTipoDeposito () {
+    static int pegaOpcaoEscolhida() {
         Scanner scanner = new Scanner(System.in);
         try {
             int opcaoEscolhida = scanner.nextInt();
@@ -37,13 +53,13 @@ public class Main {
 
         } catch (InputMismatchException ex) {
             System.out.println("Opção inválida, escolha uma outra opção.");
-            return pegaOpcaoEscolhidaTipoDeposito();
+            return pegaOpcaoEscolhida();
         }
     }
 
     static void exibeSaldoTotal (Cofre cofre) {
         cofre.exibeSaldo();
-        System.out.println(cofre.saldoTotal);
+        System.out.println(NumberFormat.getCurrencyInstance().format(cofre.saldoTotal));
     }
 
     static void exibeListaDinheiro (Cofre cofre) {
@@ -53,12 +69,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-
         Cofre novoCofreCriado = criaCofre();
+
+        exibeMenuPrincipal(novoCofreCriado);
+        disparaAcaoDoMenu(novoCofreCriado, pegaOpcaoEscolhida());
 
         exibeListaOpcoes(novoCofreCriado);
 
-        validaEDeposita(novoCofreCriado, pegaOpcaoEscolhidaTipoDeposito());
+        validaEDeposita(novoCofreCriado, pegaOpcaoEscolhida());
 
         exibeListaDinheiro(novoCofreCriado);
         exibeSaldoTotal(novoCofreCriado);

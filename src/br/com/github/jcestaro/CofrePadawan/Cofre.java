@@ -3,6 +3,8 @@ package br.com.github.jcestaro.CofrePadawan;
 import br.com.github.jcestaro.CofrePadawan.Enum.Cedula;
 import br.com.github.jcestaro.CofrePadawan.Enum.Dinheiro;
 import br.com.github.jcestaro.CofrePadawan.Enum.Moeda;
+import br.com.github.jcestaro.CofrePadawan.Menu.Menu;
+import br.com.github.jcestaro.CofrePadawan.Menu.Opcao;
 import br.com.github.jcestaro.CofrePadawan.Movimento.Deposito;
 import br.com.github.jcestaro.CofrePadawan.Movimento.Saque;
 
@@ -15,9 +17,16 @@ public class Cofre {
     public List<Dinheiro> listaDinheiro = new ArrayList<>();
     public List<Dinheiro> opcoesMoedasECedulas = new ArrayList<>();
     Dinheiro valorEscolhido;
+    Opcao opcaoMenuEscolhida;
     BigDecimal saldoTotal;
     Saque saque;
     Deposito deposito;
+    Menu menu = new Menu();
+
+    public void exibeMenuPrincipal () {
+        menu.montaMenu();
+        System.out.println(menu);
+    }
 
     public void deposita(Dinheiro dinheiro) {
         this.deposito = new Deposito();
@@ -64,6 +73,15 @@ public class Cofre {
                 .get();
 
         return this.valorEscolhido;
+    }
+
+    public Opcao validaOpcaoDoMenu (int opcaoEscolhida) {
+         this.opcaoMenuEscolhida = menu.listaOpcoes.stream()
+                .filter(opcao -> opcao.getCodigo() == opcaoEscolhida)
+                .findFirst()
+                .get();
+
+         return opcaoMenuEscolhida;
     }
 
     public BigDecimal exibeSaldo() {

@@ -6,41 +6,73 @@ import br.com.github.jcestaro.CofrePadawan.Enum.Moeda;
 import br.com.github.jcestaro.CofrePadawan.Movimento.Deposito;
 import br.com.github.jcestaro.CofrePadawan.Movimento.Saque;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class Cofre {
 
     public List<Dinheiro> listaDinheiro = new ArrayList<>();
     public List<Dinheiro> opcoesMoedasECedulas = new ArrayList<>();
+    Dinheiro valorEscolhido;
+    BigDecimal saldoTotal;
     Saque saque;
     Deposito deposito;
 
-    public void deposita() {
-        deposito = new Deposito();
+    public void deposita(Dinheiro dinheiro) {
+        this.deposito = new Deposito();
 
-        deposito.movimentar();
+        this.deposito.movimentar(dinheiro, this.listaDinheiro);
+
+        System.out.println("Valor depositado com sucesso!");
     }
+
+    public void saca(Dinheiro dinheiro){
+        this.saque = new Saque();
+
+        this.saque.movimentar(dinheiro, this.listaDinheiro);
+
+        System.out.println("Valor sacado com sucesso!");
+    }
+
+//    public void saca(BigDecimal valor){
+//        this.saque = new Saque();
+//
+//        this.saque.movimentar((Dinheiro) valor, this.listaDinheiro);
+//
+//        System.out.println("Valor sacado com sucesso!");
+//    }
+
 
     public List<Dinheiro> transformaOpcoesMoedasECedulasEmLista() {
 
         for (Moeda moeda : Moeda.values()) {
-            opcoesMoedasECedulas.add(moeda);
+            this.opcoesMoedasECedulas.add(moeda);
         }
 
         for (Cedula cedula : Cedula.values()) {
-            opcoesMoedasECedulas.add(cedula);
+            this.opcoesMoedasECedulas.add(cedula);
         }
 
-        return opcoesMoedasECedulas;
+        return this.opcoesMoedasECedulas;
     }
 
-    public Optional<Dinheiro> validaCodigoDoDinheiro(int opcaoEscolhida){
-        Optional<Dinheiro> valorEscolhido = opcoesMoedasECedulas.stream()
+    public Dinheiro validaCodigoDoDinheiro(int opcaoEscolhida){
+        this.valorEscolhido = opcoesMoedasECedulas.stream()
                 .filter(opcao -> opcao.getCodigo() == opcaoEscolhida)
-                .findFirst();
+                .findFirst()
+                .get();
 
-        return valorEscolhido;
+        return this.valorEscolhido;
+    }
+
+    public BigDecimal exibeSaldo() {
+        this.saldoTotal = this.listaDinheiro
+                .stream()
+                .reduce((dinheiro, dinheiro2) -> (Dinheiro) dinheiro.getValor().add(dinheiro2.getValor()))
+                .get()
+                .getValor();
+
+        return this.saldoTotal;
     }
 }

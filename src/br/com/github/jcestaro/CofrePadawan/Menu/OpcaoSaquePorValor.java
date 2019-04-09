@@ -1,11 +1,12 @@
 package br.com.github.jcestaro.CofrePadawan.Menu;
 
 import br.com.github.jcestaro.CofrePadawan.Cofre;
+import br.com.github.jcestaro.CofrePadawan.Enum.Dinheiro;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
+
+import static java.util.Collections.reverse;
 
 public class OpcaoSaquePorValor implements Opcao {
 
@@ -30,7 +31,48 @@ public class OpcaoSaquePorValor implements Opcao {
     }
 
     private void sacar (BigDecimal valorSaque) {
-        Collections.reverse(Cofre.getInstance().listaDinheiro);
+
+        //reordenando a lista de dinheiro do maior para o menor valor
+        Cofre.getInstance().listaDinheiro.sort((o1, o2) -> o2.getValor().compareTo(o1.getValor()));
+        //Cofre.getInstance().listaDinheiro.sort(Comparator.comparing(Dinheiro::getValor).reversed());
+
+        //verificando se tem como fazer o saque com o dinheiro que foi depositado
+        //soma o valor do saque
+        BigDecimal valorSaqueComparacao = valorSaque;
+        for (Dinheiro dinheiro : Cofre.getInstance().listaDinheiro) {
+            if (valorSaqueComparacao.compareTo(dinheiro.getValor()) > -1) {
+                valorSaqueComparacao = valorSaqueComparacao.subtract(dinheiro.getValor());
+            }
+        }
+        //verifica se vai sobrar valor do saque
+        if(valorSaqueComparacao.compareTo(BigDecimal.ZERO) > 0){
+            System.out.println("Não é possível fazer o saque, verifique a lista de cédulas e veja quais são os possíveis saques!");
+            System.out.println(Cofre.getInstance().listaDinheiro);
+            pedeValorParaUsuario();
+            verificaSeTemSaldo(pegaValorInformado());
+        }
+
+        //cria uma lista para exibir depois quais serão os valores em dinheiro do saque
+        List<Dinheiro> listaDinheiroSaque = new ArrayList<>();
+        for (Dinheiro dinheiro : Cofre.getInstance().listaDinheiro) {
+            if(valorSaque.compareTo(dinheiro.getValor()) > -1){
+                listaDinheiroSaque.add(dinheiro);
+                valorSaque = valorSaque.subtract(dinheiro.getValor());
+            }
+            if(valorSaque.compareTo(BigDecimal.ZERO) == 0){
+                break;
+            }
+        }
+
+        //exclui os dinheiros encontrados para saque
+        for (Dinheiro dinheiro : listaDinheiroSaque) {
+            Cofre.getInstance().listaDinheiro.remove(dinheiro);
+        }
+
+        //mostra qual o saque
+        System.out.println("Saque efetuado com sucesso, pegue o seu dinheiro!");
+        System.out.println(listaDinheiroSaque);
+
     }
 
     private void pedeValorParaUsuario () {

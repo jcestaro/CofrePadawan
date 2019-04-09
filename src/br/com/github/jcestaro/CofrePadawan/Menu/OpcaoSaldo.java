@@ -14,8 +14,7 @@ public class OpcaoSaldo implements Opcao {
     }
 
     private void exibeSaldoTotal () {
-        Cofre.getInstance().exibeSaldo();
-        System.out.println(NumberFormat.getCurrencyInstance().format(Cofre.getInstance()));
+        System.out.println(NumberFormat.getCurrencyInstance().format(Cofre.getInstance().buscarSaldoTotal()));
     }
 
     @Override

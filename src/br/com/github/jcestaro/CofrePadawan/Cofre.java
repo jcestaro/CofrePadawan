@@ -95,13 +95,13 @@ public class Cofre {
          return opcaoMenuEscolhida;
     }
 
-    public BigDecimal exibeSaldo() {
-        this.saldoTotal = this.listaDinheiro
-                .stream()
-                .reduce((dinheiro, dinheiro2) -> (Dinheiro) dinheiro.getValor().add(dinheiro2.getValor()))
-                .get()
-                .getValor();
+    public BigDecimal buscarSaldoTotal() {
+        saldoTotal = new BigDecimal(0);
 
-        return this.saldoTotal;
+        for (Dinheiro dinheiro : listaDinheiro){
+            saldoTotal = saldoTotal.add(dinheiro.getValor());
+        }
+
+        return saldoTotal;
     }
 }

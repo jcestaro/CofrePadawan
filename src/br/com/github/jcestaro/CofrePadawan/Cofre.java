@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Cofre {
 
-    private static Cofre singletonCofre = null;
+    private static Cofre singletonCofre;
     public List<Dinheiro> listaDinheiro = new ArrayList<>();
     public List<Dinheiro> opcoesMoedasECedulas;
     private Dinheiro valorEscolhido;
@@ -25,10 +25,10 @@ public class Cofre {
 
     private Cofre() {}
 
-    public static Cofre getInstance()
-    {
-        if (singletonCofre == null)
+    public static synchronized Cofre getInstance() {
+        if (singletonCofre == null) {
             singletonCofre = new Cofre();
+        }
 
         return singletonCofre;
     }
@@ -50,19 +50,15 @@ public class Cofre {
     public void saca(Dinheiro dinheiro){
         this.saque = new Saque();
 
-        this.saque.movimentar(dinheiro, this.listaDinheiro);
+        if (listaDinheiro.isEmpty() || !listaDinheiro.contains(dinheiro)){
+            System.out.println();
+            System.out.println("Não é possível sacar o valor desejado");
 
-        System.out.println("Valor sacado com sucesso!");
+        } else {
+            this.saque.movimentar(dinheiro, this.listaDinheiro);
+            System.out.println("Valor sacado com sucesso!");
+        }
     }
-
-    public void saca(BigDecimal valor){
-        this.saque = new Saque();
-
-        this.saque.movimentar((Dinheiro) valor, this.listaDinheiro);
-
-        System.out.println("Valor sacado com sucesso!");
-    }
-
 
     public List<Dinheiro> transformaOpcoesMoedasECedulasEmLista() {
         opcoesMoedasECedulas = new ArrayList<>();

@@ -2,11 +2,8 @@ package br.com.github.jcestaro.CofrePadawan.Menu;
 
 import br.com.github.jcestaro.CofrePadawan.Cofre;
 import br.com.github.jcestaro.CofrePadawan.Enum.Dinheiro;
-
 import java.math.BigDecimal;
 import java.util.*;
-
-import static java.util.Collections.reverse;
 
 public class OpcaoSaquePorValor implements Opcao {
 
@@ -34,7 +31,6 @@ public class OpcaoSaquePorValor implements Opcao {
 
         //reordenando a lista de dinheiro do maior para o menor valor
         Cofre.getInstance().listaDinheiro.sort((o1, o2) -> o2.getValor().compareTo(o1.getValor()));
-        //Cofre.getInstance().listaDinheiro.sort(Comparator.comparing(Dinheiro::getValor).reversed());
 
         //verificando se tem como fazer o saque com o dinheiro que foi depositado
         //soma o valor do saque
@@ -47,7 +43,10 @@ public class OpcaoSaquePorValor implements Opcao {
         //verifica se vai sobrar valor do saque
         if(valorSaqueComparacao.compareTo(BigDecimal.ZERO) > 0){
             System.out.println("Não é possível fazer o saque, verifique a lista de cédulas e veja quais são os possíveis saques!");
-            System.out.println(Cofre.getInstance().listaDinheiro);
+            System.out.println("O cofre possui notas/moedas de: ");
+            System.out.println();
+            Cofre.getInstance().listaDinheiro.forEach(dinheiro -> System.out.println(dinheiro.getDescricao()));
+            System.out.println();
             pedeValorParaUsuario();
             verificaSeTemSaldo(pegaValorInformado());
         }

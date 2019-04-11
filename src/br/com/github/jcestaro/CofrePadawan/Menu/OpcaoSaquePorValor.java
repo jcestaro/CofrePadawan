@@ -12,46 +12,58 @@ public class OpcaoSaquePorValor implements Opcao {
 
     @Override
     public void disparaAcao() {
-        pedeValorParaUsuario();
-        verificaSeTemSaldo(pegaValorInformado());
+        boolean temDinheiroNoCofre = verificaSeTemDinheiroNoCofre();
+        if (temDinheiroNoCofre){
+            verificaSeTemSaldo(pegaValorInformado());
+        }
+    }
+
+    private  boolean verificaSeTemDinheiroNoCofre () {
+        BigDecimal saldoTotal = Cofre.getInstance().buscarSaldoTotal();
+
+        if (saldoTotal.compareTo(BigDecimal.ZERO) == 0) {
+            System.out.println("Não é possível sacar, o cofre está vazio!");
+            return false;
+        }
+        return true;
     }
 
     private void verificaSeTemSaldo (BigDecimal valorSaque) {
         BigDecimal saldoTotal = Cofre.getInstance().buscarSaldoTotal();
+
         if (saldoTotal.compareTo(valorSaque) == -1) {
             System.out.println("Não é possível sacar " + valorSaque + ", pois o saldo atual é: " + saldoTotal);
-            pedeValorParaUsuario();
             verificaSeTemSaldo(pegaValorInformado());
         } else {
             sacar(valorSaque);
         }
     }
 
-    private void sacar (BigDecimal valorSaque) {
 
-        //reordenando a lista de dinheiro do maior para o menor valor
-        Cofre.getInstance().listaDinheiro.sort((o1, o2) -> o2.getValor().compareTo(o1.getValor()));
-
-        //verificando se tem como fazer o saque com o dinheiro que foi depositado
-        //soma o valor do saque
+    private void verificaSeTemCedulaMoedaDisponivelParaOValorDoSaque (BigDecimal valorSaque) {
         BigDecimal valorSaqueComparacao = valorSaque;
         for (Dinheiro dinheiro : Cofre.getInstance().listaDinheiro) {
             if (valorSaqueComparacao.compareTo(dinheiro.getValor()) > -1) {
                 valorSaqueComparacao = valorSaqueComparacao.subtract(dinheiro.getValor());
             }
         }
-        //verifica se vai sobrar valor do saque
         if(valorSaqueComparacao.compareTo(BigDecimal.ZERO) > 0){
             System.out.println("Não é possível fazer o saque, verifique a lista de cédulas e veja quais são os possíveis saques!");
-            System.out.println("O cofre possui notas/moedas de: ");
-            System.out.println();
-            Cofre.getInstance().listaDinheiro.forEach(dinheiro -> System.out.println(dinheiro.getDescricao()));
-            System.out.println();
-            pedeValorParaUsuario();
+            System.out.println("O cofre possui notas/moedas de: " + System.lineSeparator());
+            Cofre.getInstance().listaDinheiro.forEach(dinheiro -> System.out.println(dinheiro.getDescricao() + System.lineSeparator()));
             verificaSeTemSaldo(pegaValorInformado());
         }
+    }
 
-        //cria uma lista para exibir depois quais serão os valores em dinheiro do saque
+    private void ordenaListaDinheiroDoMaiorParaOMenor () {
+        Cofre.getInstance().listaDinheiro.sort((dinheiro1, dinheiro2) -> dinheiro2.getValor().compareTo(dinheiro1.getValor()));
+    }
+
+    private void sacar (BigDecimal valorSaque) {
+        ordenaListaDinheiroDoMaiorParaOMenor();
+
+        verificaSeTemCedulaMoedaDisponivelParaOValorDoSaque(valorSaque);
+
         List<Dinheiro> listaDinheiroSaque = new ArrayList<>();
         for (Dinheiro dinheiro : Cofre.getInstance().listaDinheiro) {
             if(valorSaque.compareTo(dinheiro.getValor()) > -1){
@@ -63,22 +75,17 @@ public class OpcaoSaquePorValor implements Opcao {
             }
         }
 
-        //exclui os dinheiros encontrados para saque
         for (Dinheiro dinheiro : listaDinheiroSaque) {
             Cofre.getInstance().listaDinheiro.remove(dinheiro);
         }
 
-        //mostra qual o saque
         System.out.println("Saque efetuado com sucesso, pegue o seu dinheiro!");
         System.out.println(listaDinheiroSaque);
-
-    }
-
-    private void pedeValorParaUsuario () {
-        System.out.println("Digite o valor a ser sacado: ");
     }
 
     private BigDecimal pegaValorInformado() {
+        System.out.println("Digite o valor a ser sacado: ");
+
         Scanner scanner = new Scanner(System.in);
         try {
             BigDecimal valorInformado = scanner.nextBigDecimal();

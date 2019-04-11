@@ -22,7 +22,7 @@ public class OpcaoSaquePorValor implements Opcao {
         BigDecimal saldoTotal = Cofre.getInstance().buscarSaldoTotal();
 
         if (saldoTotal.compareTo(BigDecimal.ZERO) == 0) {
-            System.out.println("Não é possível sacar, o cofre está vazio!");
+            System.out.println("Não é possível sacar, o cofre está vazio!" + System.lineSeparator());
             return false;
         }
         return true;

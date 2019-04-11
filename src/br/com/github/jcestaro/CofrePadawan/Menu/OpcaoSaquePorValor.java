@@ -9,12 +9,13 @@ public class OpcaoSaquePorValor implements Opcao {
 
     private final int codigo = 3;
     private final String descricao = "Saque por valor";
+    List<Dinheiro> listaDinheiroSaque;
 
     @Override
     public void disparaAcao() {
         boolean temDinheiroNoCofre = verificaSeTemDinheiroNoCofre();
         if (temDinheiroNoCofre){
-            verificaSeTemSaldo(pegaValorInformado());
+            verificaSeTemSaldoParaSacarESaca(pegaValorInformado());
         }
     }
 
@@ -28,12 +29,12 @@ public class OpcaoSaquePorValor implements Opcao {
         return true;
     }
 
-    private void verificaSeTemSaldo (BigDecimal valorSaque) {
+    private void verificaSeTemSaldoParaSacarESaca(BigDecimal valorSaque) {
         BigDecimal saldoTotal = Cofre.getInstance().buscarSaldoTotal();
 
         if (saldoTotal.compareTo(valorSaque) == -1) {
             System.out.println("Não é possível sacar " + valorSaque + ", pois o saldo atual é: " + saldoTotal);
-            verificaSeTemSaldo(pegaValorInformado());
+            verificaSeTemSaldoParaSacarESaca(pegaValorInformado());
         } else {
             sacar(valorSaque);
         }
@@ -51,7 +52,7 @@ public class OpcaoSaquePorValor implements Opcao {
             System.out.println("Não é possível fazer o saque, verifique a lista de cédulas e veja quais são os possíveis saques!");
             System.out.println("O cofre possui notas/moedas de: " + System.lineSeparator());
             Cofre.getInstance().listaDinheiro.forEach(dinheiro -> System.out.println(dinheiro.getDescricao() + System.lineSeparator()));
-            verificaSeTemSaldo(pegaValorInformado());
+            verificaSeTemSaldoParaSacarESaca(pegaValorInformado());
         }
     }
 
@@ -60,11 +61,24 @@ public class OpcaoSaquePorValor implements Opcao {
     }
 
     private void sacar (BigDecimal valorSaque) {
+        listaDinheiroSaque = new ArrayList<>();
+
         ordenaListaDinheiroDoMaiorParaOMenor();
-
         verificaSeTemCedulaMoedaDisponivelParaOValorDoSaque(valorSaque);
+        adicionarDinheiroNaListaDeSaque(valorSaque);
+        removeDinheiroDaListaDoCofre();
+    }
 
-        List<Dinheiro> listaDinheiroSaque = new ArrayList<>();
+    private void removeDinheiroDaListaDoCofre () {
+        for (Dinheiro dinheiro : listaDinheiroSaque) {
+            Cofre.getInstance().listaDinheiro.remove(dinheiro);
+        }
+
+        System.out.println("Saque efetuado com sucesso, pegue o seu dinheiro!");
+        System.out.println(listaDinheiroSaque);
+    }
+
+    private void adicionarDinheiroNaListaDeSaque (BigDecimal valorSaque) {
         for (Dinheiro dinheiro : Cofre.getInstance().listaDinheiro) {
             if(valorSaque.compareTo(dinheiro.getValor()) > -1){
                 listaDinheiroSaque.add(dinheiro);
@@ -74,13 +88,6 @@ public class OpcaoSaquePorValor implements Opcao {
                 break;
             }
         }
-
-        for (Dinheiro dinheiro : listaDinheiroSaque) {
-            Cofre.getInstance().listaDinheiro.remove(dinheiro);
-        }
-
-        System.out.println("Saque efetuado com sucesso, pegue o seu dinheiro!");
-        System.out.println(listaDinheiroSaque);
     }
 
     private BigDecimal pegaValorInformado() {

@@ -50,10 +50,10 @@ public class Cofre {
     public void saca(Dinheiro dinheiro){
         this.saque = new Saque();
 
-        if (listaDinheiro.isEmpty() || !listaDinheiro.contains(dinheiro)){
+        if (!listaDinheiro.contains(dinheiro)){
             System.out.println();
-            System.out.println("Não é possível sacar o valor desejado");
-
+            System.out.println("Não é possível sacar o valor desejado, verifique as cédulas/moedas disponíveis abaixo: " + System.lineSeparator());
+            listaDinheiro.forEach(valor -> System.out.println(valor.getDescricao()));
         } else {
             this.saque.movimentar(dinheiro, this.listaDinheiro);
             System.out.println("Valor sacado com sucesso!");

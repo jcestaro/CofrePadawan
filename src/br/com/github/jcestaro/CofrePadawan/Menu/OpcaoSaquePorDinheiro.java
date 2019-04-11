@@ -2,6 +2,8 @@ package br.com.github.jcestaro.CofrePadawan.Menu;
 
 import br.com.github.jcestaro.CofrePadawan.Cofre;
 import br.com.github.jcestaro.CofrePadawan.Enum.Dinheiro;
+
+import java.math.BigDecimal;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -13,8 +15,21 @@ public class OpcaoSaquePorDinheiro implements Opcao {
 
     @Override
     public void disparaAcao() {
-        exibeListaOpcoesParaSaque();
-        validaESaca(Cofre.getInstance(), pegaOpcaoEscolhida());
+        boolean temDinheiroNoCofre = verificaSeTemDinheiroNoCofre();
+        if (temDinheiroNoCofre){
+            exibeListaOpcoesParaSaque();
+            validaESaca(Cofre.getInstance(), pegaOpcaoEscolhida());
+        }
+    }
+
+    private  boolean verificaSeTemDinheiroNoCofre () {
+        BigDecimal saldoTotal = Cofre.getInstance().buscarSaldoTotal();
+
+        if (saldoTotal.compareTo(BigDecimal.ZERO) == 0) {
+            System.out.println("Não é possível sacar, o cofre está vazio!");
+            return false;
+        }
+        return true;
     }
 
     private void exibeListaOpcoesParaSaque() {

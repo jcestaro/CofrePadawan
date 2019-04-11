@@ -33,7 +33,7 @@ public class OpcaoSaquePorDinheiro implements Opcao {
     }
 
     private void exibeListaOpcoesParaSaque() {
-        Cofre.getInstance().transformaOpcoesMoedasECedulasEmLista().forEach(System.out::println);
+        Cofre.getInstance().listaDinheiro.stream().distinct().forEach(System.out::println);
 
         System.out.println();
         System.out.println("Escolha uma opção para saque: ");

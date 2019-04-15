@@ -3,9 +3,9 @@ package br.com.github.jcestaro.CofrePadawan.Movimento;
 import br.com.github.jcestaro.CofrePadawan.Enum.Dinheiro;
 import java.util.List;
 
-public interface Movimento  {
+public abstract class Movimento  {
 
-    default void movimentar(Dinheiro valor, List<Dinheiro> listaDinheiro) {
+    public void movimentar(Dinheiro valor, List<Dinheiro> listaDinheiro) {
 
         if (ehDeposito()){
             depositar(valor, listaDinheiro);
@@ -14,8 +14,8 @@ public interface Movimento  {
         }
     }
 
-    boolean ehDeposito();
-    void sacar (Dinheiro valor, List<Dinheiro> listaDinheiro);
-    void depositar (Dinheiro valor, List<Dinheiro> listaDinheiro);
+    public abstract boolean ehDeposito();
+    public void sacar (Dinheiro valor, List<Dinheiro> listaDinheiro){}
+    public void depositar (Dinheiro valor, List<Dinheiro> listaDinheiro){}
 
 }

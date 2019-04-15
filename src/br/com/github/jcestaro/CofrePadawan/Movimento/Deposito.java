@@ -3,7 +3,7 @@ package br.com.github.jcestaro.CofrePadawan.Movimento;
 import br.com.github.jcestaro.CofrePadawan.Enum.Dinheiro;
 import java.util.List;
 
-public class Deposito implements Movimento{
+public class Deposito extends Movimento{
 
     @Override
     public boolean ehDeposito() {
@@ -14,6 +14,4 @@ public class Deposito implements Movimento{
     public void depositar(Dinheiro valor, List<Dinheiro> listaDinheiro) {
         listaDinheiro.add(valor);
     }
-
-    public void sacar(Dinheiro valor, List<Dinheiro> listaDinheiro) {}
 }

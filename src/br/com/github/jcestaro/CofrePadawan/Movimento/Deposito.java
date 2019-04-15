@@ -6,7 +6,14 @@ import java.util.List;
 public class Deposito extends Movimento{
 
     @Override
-    public void movimentar(Dinheiro dinheiro, List<Dinheiro> listaDinheiro) {
-        listaDinheiro.add(dinheiro);
+    public boolean ehDeposito() {
+        return true;
     }
+
+    @Override
+    public void depositar(Dinheiro valor, List<Dinheiro> listaDinheiro) {
+        listaDinheiro.add(valor);
+    }
+
+    public void sacar(Dinheiro valor, List<Dinheiro> listaDinheiro) {}
 }

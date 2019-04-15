@@ -6,7 +6,15 @@ import java.util.List;
 public class Saque extends Movimento{
 
     @Override
-    public void movimentar(Dinheiro dinheiro, List<Dinheiro> listaDinheiro) {
-        listaDinheiro.remove(dinheiro);
+    public boolean ehDeposito() {
+        return false;
     }
+
+    @Override
+    public void sacar(Dinheiro valor, List<Dinheiro> listaDinheiro) {
+        listaDinheiro.remove(valor);
+    }
+
+    @Override
+    public void depositar(Dinheiro valor, List<Dinheiro> listaDinheiro) {}
 }
